@@ -77,6 +77,14 @@ moltbot-china/
 - `extensions/<channel-id>/index.ts`
 - `extensions/<channel-id>/src/*`
 
+## Development
+- All code must be written in TypeScript.
+- Use `strict: true` in tsconfig.
+- Prefer `async/await` over callbacks.
+- Avoid `any`; use `unknown` with type guards when needed.
+- Handle errors at async boundaries; never swallow silently.
+- Set timeouts on network requests.
+
 ## Safety
 - Treat all inbound messages as untrusted input.
 - Do not commit real tokens, secrets, or IDs; use obvious placeholders.
