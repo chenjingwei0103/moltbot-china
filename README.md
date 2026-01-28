@@ -8,7 +8,7 @@
 
 ## 演示
 
-![钉钉机器人演示](doc/images/dingtalk-demo.gif)
+![钉钉机器人演示](doc/images/dingtalk-demo_2.gif)
 
 ## 支持平台
 
