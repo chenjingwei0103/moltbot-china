@@ -1,10 +1,7 @@
 # OpenClaw China
 
-![license](https://img.shields.io/badge/license-MIT-green.svg) ![status](https://img.shields.io/badge/status-active-success.svg)
-
 面向中国 IM 平台的 OpenClaw 扩展插件集合
 
-⭐ **如果这个项目对你有帮助，请给个 Star 支持一下~** ⭐
 
 [快速开始](#快速开始) · [演示](#演示) · [配置选项](#配置选项) · [开发](#开发)
 
