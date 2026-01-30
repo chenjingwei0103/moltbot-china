@@ -36,14 +36,14 @@ Moltbot 可以连接到你已经使用的任何聊天应用。每个渠道通过
 
 ---
 
-## 缺少的中国平台（moltbot-china 目标）
+## 中国平台（moltbot-china）
 
 | 渠道 | 状态 | 插件名称 |
 |------|:----:|----------|
-| 飞书 | 🚧 开发中 | `@moltbot/feishu` |
-| 钉钉 | 🚧 开发中 | `@moltbot/dingtalk` |
-| 企业微信 | 🚧 开发中 | `@moltbot/wecom` |
-| QQ | 📋 计划中 | `@moltbot/qq` |
+| 飞书 | 🚧 开发中 | `@openclaw-china/feishu` |
+| 钉钉 | ✅ 已支持 | `@openclaw-china/dingtalk` |
+| 企业微信 | ✅ 已支持 | `@openclaw-china/wecom` |
+| QQ | 📋 计划中 | `@openclaw-china/qq` |
 
 ---
 

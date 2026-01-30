@@ -3,7 +3,7 @@
   "name": "Moltbot China Channels",
   "description": "统一渠道包，支持钉钉、飞书、企业微信、QQ",
   "version": "0.1.0",
-  "channels": ["dingtalk"],
+  "channels": ["dingtalk", "feishu"],
   "configSchema": {
     "type": "object",
     "additionalProperties": false,

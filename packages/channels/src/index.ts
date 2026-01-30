@@ -16,6 +16,21 @@ import {
   getDingtalkRuntime,
 } from "@openclaw-china/dingtalk";
 import dingtalkEntry from "@openclaw-china/dingtalk";
+import {
+  feishuPlugin,
+  DEFAULT_ACCOUNT_ID as FEISHU_DEFAULT_ACCOUNT_ID,
+  sendMessageFeishu,
+  setFeishuRuntime,
+  getFeishuRuntime,
+} from "@openclaw-china/feishu";
+import feishuEntry from "@openclaw-china/feishu";
+// import {
+//   wecomPlugin,
+//   DEFAULT_ACCOUNT_ID as WECOM_DEFAULT_ACCOUNT_ID,
+//   setWecomRuntime,
+//   getWecomRuntime,
+// } from "@openclaw-china/wecom";
+// import wecomEntry from "@openclaw-china/wecom";
 
 export {
   dingtalkPlugin,
@@ -23,6 +38,15 @@ export {
   sendMessageDingtalk,
   setDingtalkRuntime,
   getDingtalkRuntime,
+  feishuPlugin,
+  FEISHU_DEFAULT_ACCOUNT_ID,
+  sendMessageFeishu,
+  setFeishuRuntime,
+  getFeishuRuntime,
+  // wecomPlugin,
+  // WECOM_DEFAULT_ACCOUNT_ID,
+  // setWecomRuntime,
+  // getWecomRuntime,
 };
 
 export type {
@@ -30,10 +54,14 @@ export type {
   ResolvedDingtalkAccount,
   DingtalkSendResult,
 } from "@openclaw-china/dingtalk";
+export type {
+  FeishuConfig,
+  ResolvedFeishuAccount,
+  FeishuSendResult,
+} from "@openclaw-china/feishu";
+// export type { WecomConfig, ResolvedWecomAccount, WecomInboundMessage } from "@openclaw-china/wecom";
 
 // TODO: 后续添加其他渠道
-// export { feishuPlugin } from "@openclaw-china/feishu";
-// export { wecomPlugin } from "@openclaw-china/wecom";
 // export { qqPlugin } from "@openclaw-china/qq";
 
 /**
@@ -73,8 +101,8 @@ export interface MoltbotPluginApi {
 /**
  * 支持的渠道列表
  */
-export const SUPPORTED_CHANNELS = ["dingtalk"] as const;
-// TODO: 后续添加 "feishu", "wecom", "qq"
+export const SUPPORTED_CHANNELS = ["dingtalk", "feishu"] as const;
+// TODO: 后续添加 "wecom", "qq"
 
 export type SupportedChannel = (typeof SUPPORTED_CHANNELS)[number];
 
@@ -84,6 +112,16 @@ const channelPlugins: Record<SupportedChannel, { register: (api: MoltbotPluginAp
       dingtalkEntry.register(api);
     },
   },
+  feishu: {
+    register: (api: MoltbotPluginApi) => {
+      feishuEntry.register(api);
+    },
+  },
+  // wecom: {
+  //   register: (api: MoltbotPluginApi) => {
+  //     wecomEntry.register(api);
+  //   },
+  // },
 };
 
 /**

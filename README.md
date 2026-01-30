@@ -11,7 +11,7 @@
 | 平台 | 状态 |
 |------|:----:|
 | 钉钉 | ✅ 可用 |
-| 飞书 | 🚧 开发中 |
+| 飞书 | ✅ 可用 |
 | 企业微信 | 🚧 开发中 |
 | QQ 机器人 | 🚧 开发中 |
 
@@ -37,6 +37,10 @@ clawdbot plugins install @openclaw-china/channels
 
 ```bash
 clawdbot plugins install @openclaw-china/dingtalk
+```
+
+```bash
+clawdbot plugins install @openclaw-china/feishu
 ```
 
 ### 钉钉配置
@@ -73,6 +77,28 @@ clawdbot config set channels.dingtalk '{
     }
   }
 }
+```
+
+#### 重启 Gateway
+
+```bash
+clawdbot gateway restart
+```
+
+### 飞书配置
+
+> 飞书应用需开启机器人能力，并使用「长连接接收消息」模式
+
+#### 配置
+
+Clawdbot:
+
+```bash
+clawdbot config set channels.feishu '{
+  "enabled": true,
+  "appId": "cli_xxxxxx",
+  "appSecret": "your-app-secret"
+}' --json
 ```
 
 #### 重启 Gateway
@@ -127,9 +153,10 @@ clawdbot plugins install -l ./packages/channels
 # clawdbot plugins install -l ./extensions/dingtalk
 ```
 
-配置中添加：
+配置中添加（注意：Clawdbot 会加载 `dist/index.js`，开发时也需要先 build）：
 
-```
+```json
+{
   "plugins": {
     "load": {
       "paths": ["/path/to/moltbot-china/packages/channels"]
@@ -137,9 +164,22 @@ clawdbot plugins install -l ./packages/channels
     "entries": {
       "channels": { "enabled": true }
     }
+  },
+  "channels": {
+    "dingtalk": {
+      "enabled": true,
+      "clientId": "dingxxxxxx",
+      "clientSecret": "your-app-secret"
+    },
+    "feishu": {
+      "enabled": true,
+      "appId": "cli_xxxxxx",
+      "appSecret": "your-app-secret"
+    }
   }
+}
 ```
-
+@RE
 ## License
 
 MIT

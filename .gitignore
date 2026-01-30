@@ -48,3 +48,6 @@ coverage/
 Thumbs.db
 
 doc/reference-projects/
+
+# WeCom extension
+extensions/wecom/

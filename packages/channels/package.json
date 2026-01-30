@@ -43,7 +43,8 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@openclaw-china/dingtalk": "0.1.6"
+    "@openclaw-china/dingtalk": "workspace:*",
+    "@openclaw-china/feishu": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

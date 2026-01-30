@@ -226,14 +226,13 @@ channels:
 
   wecom:
     enabled: true
-    corpId: "xxx"
-    agentId: 1000001
-    secret: "secret"
+    webhookPath: "/wecom"
     token: "callback_token"
     encodingAESKey: "aes_key"
-    callbackPort: 8080
+    receiveId: ""
     dmPolicy: "pairing"
-    groupPolicy: "allowlist"
+    groupPolicy: "open"
+    requireMention: true
 
   qq:
     enabled: true
