@@ -1,12 +1,12 @@
-# Moltbot China
+# OpenClaw China
 
 ![license](https://img.shields.io/badge/license-MIT-green.svg) ![status](https://img.shields.io/badge/status-active-success.svg)
 
-面向中国 IM 平台的 Moltbot 扩展插件集合
+面向中国 IM 平台的 OpenClaw 扩展插件集合
 
 ⭐ **如果这个项目对你有帮助，请给个 Star 支持一下~** ⭐
 
-[快速开始](#快速开始)
+[快速开始](#快速开始) · [演示](#演示) · [配置选项](#配置选项) · [开发](#开发)
 
 | 平台 | 状态 |
 |------|:----:|
@@ -15,17 +15,9 @@
 | 企业微信 | 🚧 开发中 |
 | QQ 机器人 | 🚧 开发中 |
 
-## 演示
-
-![钉钉机器人演示](doc/images/dingtalk-demo_2.gif)
-
-![钉钉机器人演示](doc/images/dingtalk-demo_3.png)
-
-
-
 ## 快速开始
 
-### 安装
+### 1) 安装
 
 **安装统一包（包含所有渠道）**
 
@@ -43,15 +35,11 @@ clawdbot plugins install @openclaw-china/dingtalk
 clawdbot plugins install @openclaw-china/feishu
 ```
 
-### 钉钉配置
+### 2) 配置渠道
+
+#### 钉钉
 
 > 📖 **[钉钉企业注册指南](doc/guides/dingtalk/configuration.md)** — 无需材料，5 分钟内完成配置
-
-
-#### 配置
-
-Clawdbot:
-
 ```bash
 clawdbot config set channels.dingtalk '{
   "enabled": true,
@@ -62,34 +50,25 @@ clawdbot config set channels.dingtalk '{
 
 **可选高级配置**
 
-如果你需要更细粒度控制（例如私聊/群聊策略或白名单），可以按需添加以下字段：
-编辑 `~/.clawdbot/clawdbot.json`
+如果你需要更细粒度控制（例如私聊/群聊策略或白名单），可以在 `~/.clawdbot/clawdbot.json` 中按需添加：
 
 ```json5
 {
   "channels": {
     "dingtalk": {
-      "dmPolicy": "open",          // open | pairing | allowlist (默认: open)
-      "groupPolicy": "open",       // open | allowlist | disabled (默认: open)
-      "requireMention": true,      // 默认: true
-      "allowFrom": [],             // 默认: 未设置
-      "groupAllowFrom": []         // 默认: 未设置
+      "dmPolicy": "open",          // open | allowlist
+      "groupPolicy": "open",       // open | allowlist | disabled
+      "requireMention": true,
+      "allowFrom": [],
+      "groupAllowFrom": []
     }
   }
 }
 ```
 
-#### 重启 Gateway
-
-```bash
-clawdbot gateway restart
-```
-
-### 飞书配置
+#### 飞书
 
 > 飞书应用需开启机器人能力，并使用「长连接接收消息」模式
-
-#### 配置
 
 Clawdbot:
 
@@ -101,27 +80,37 @@ clawdbot config set channels.feishu '{
 }' --json
 ```
 
-#### 重启 Gateway
+### 3) 重启 Gateway
 
 ```bash
 clawdbot gateway restart
 ```
 
+## 演示
+
+以下为钉钉渠道效果示例：
+
+![钉钉机器人演示](doc/images/dingtalk-demo_2.gif)
+
+![钉钉机器人演示](doc/images/dingtalk-demo_3.png)
+
 ## 配置选项
 
-| 选项 | 默认值 | 说明 |
-|------|--------|------|
-| `enabled` | `true` | 是否启用 |
-| `clientId` | - | 应用的 AppKey（必填） |
-| `clientSecret` | - | 应用的 AppSecret（必填） |
-| `dmPolicy` | `pairing` | 私聊策略：`open`（任何人）/ `pairing`（需配对）/ `allowlist`（白名单） |
-| `groupPolicy` | `allowlist` | 群聊策略：`open`（任何群）/ `allowlist`（白名单）/ `disabled`（禁用） |
-| `requireMention` | `true` | 群聊中是否需要 @机器人 |
-| `allowFrom` | `[]` | 私聊白名单用户 ID |
-| `groupAllowFrom` | `[]` | 群聊白名单群 ID |
+> 通用字段适用于所有渠道；渠道专用字段仅在对应渠道生效。
+
+### 通用字段
+
+| 选项 | 说明 |
+|------|------|
+| `enabled` | 是否启用 |
+| `dmPolicy` | 私聊策略：`open`（任何人）/ `allowlist`（白名单） |
+| `groupPolicy` | 群聊策略：`open`（任何群）/ `allowlist`（白名单）/ `disabled`（禁用） |
+| `requireMention` | 群聊中是否需要 @机器人 |
+| `allowFrom` | 私聊白名单用户 ID |
+| `groupAllowFrom` | 群聊白名单群 ID |
 
 
-## 会话配置
+### 会话配置（可选）
 
 `session.dmScope` 控制不同用户的会话隔离方式：
 
@@ -130,8 +119,6 @@ clawdbot gateway restart
 | `main` | 所有用户共享同一会话（不推荐） |
 | `per-peer` | **推荐**，按用户 ID 隔离 |
 | `per-channel-peer` | 按渠道 + 用户隔离 |
-
-
 
 ## 开发
 
@@ -153,13 +140,13 @@ clawdbot plugins install -l ./packages/channels
 # clawdbot plugins install -l ./extensions/dingtalk
 ```
 
-配置中添加（注意：Clawdbot 会加载 `dist/index.js`，开发时也需要先 build）：
+**示例配置（开发环境）**
 
 ```json
 {
   "plugins": {
     "load": {
-      "paths": ["/path/to/moltbot-china/packages/channels"]
+      "paths": ["/path/to/OpenClaw-china/packages/channels"]
     },
     "entries": {
       "channels": { "enabled": true }
@@ -179,7 +166,7 @@ clawdbot plugins install -l ./packages/channels
   }
 }
 ```
-@RE
+
 ## License
 
 MIT
