@@ -53,3 +53,41 @@
 ### 4. 获取 clientId / clientSecret
 
 ![Credentials](../../images/dingtalk_credentials.png)
+
+### 5. 版本发布
+
+注：只有进行版本发布，钉钉中才能搜索到这个机器人。
+
+
+
+
+
+![Version Create](../../images/dingtalk_version_create.png)
+
+![Version Info](../../images/dingtalk_version_info.png)
+
+![Version Publish](../../images/dingtalk_version_publish.png)
+
+
+
+### 6. 开启流式输出（可选）
+
+此步骤为可选配置。即使配置中启用了流式输出但未开通权限，机器人仍可正常对话。
+
+如果不需要流式输出，可以在配置中设置 `"enableAICard": false`。
+
+若要启用流式输出，请在权限管理中搜索并开通以下两个权限：
+
+- `Card.Instance.Write`
+- `Card.Streaming.Write`
+
+
+
+![Permission Search](../../images/dingtalk_permission_search.png)
+
+![Permission Apply](../../images/dingtalk_permission_apply.png)
+
+
+
+
+
