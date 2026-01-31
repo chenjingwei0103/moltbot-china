@@ -190,7 +190,7 @@ export async function monitorDingtalkProvider(opts: MonitorDingtalkOpts = {}): P
             accountId,
             log: (msg: string) => logger.info(msg.replace(/^\[dingtalk\]\s*/, "")),
             error: (msg: string) => logger.error(msg.replace(/^\[dingtalk\]\s*/, "")),
-            enableAICard: dingtalkCfg?.enableAICard ?? false,
+            enableAICard: dingtalkCfg?.enableAICard ?? true,
           }).catch((err) => {
             logger.error(`error handling message: ${String(err)}`);
           });
