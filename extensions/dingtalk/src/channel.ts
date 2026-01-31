@@ -16,6 +16,7 @@ import { DingtalkConfigSchema, isConfigured, resolveDingtalkCredentials } from "
 import { dingtalkOutbound } from "./outbound.js";
 import { monitorDingtalkProvider } from "./monitor.js";
 import { setDingtalkRuntime } from "./runtime.js";
+import { dingtalkOnboardingAdapter } from "./onboarding.js";
 
 /** 默认账户 ID */
 export const DEFAULT_ACCOUNT_ID = "default";
@@ -121,6 +122,7 @@ export const dingtalkPlugin = {
         groupAllowFrom: { type: "array", items: { type: "string" } },
         historyLimit: { type: "integer", minimum: 0 },
         textChunkLimit: { type: "integer", minimum: 1 },
+        enableAICard: { type: "boolean" },
       },
     },
   },
@@ -250,6 +252,11 @@ export const dingtalkPlugin = {
       };
     },
   },
+
+  /**
+   * Onboarding 适配器
+   */
+  onboarding: dingtalkOnboardingAdapter,
 
   /**
    * 出站消息适配器

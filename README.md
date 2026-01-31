@@ -12,6 +12,29 @@
 | 企业微信 | ✅ 可用 |
 | QQ 机器人 | 🚧 开发中 |
 
+## 功能支持
+
+较多功能支持仍在努力开发中~
+
+| 功能 | 钉钉 | 飞书 | 企业微信 |
+|------|:----:|:----:|:--------:|
+| 文本消息 | ✅ | ✅ | ✅ |
+| Markdown | ✅ | ✅ | ✅ |
+| 流式响应 | ✅ | ❌ | ✅ stream 回调 |
+| 图片/文件 | ✅ 仅接收（发送开发中） | ❌ | ✅ 仅接收 |
+| 语音消息 | ✅ 收发（接收为语音文本） | ❌ | ✅ 仅接收（语音文本） |
+| 私聊 | ✅ | ✅ | ✅ |
+| 群聊 | ✅ | ✅ | ✅ |
+| @机器人检测 | ✅ | ✅ | ❌（未显式解析@） |
+| 多账户 | ❌ | ❌ | ✅ |
+| 连接方式 | Stream 长连接 | WebSocket 长连接 | HTTPS 回调 |
+
+> 💡 **钉钉 AI Card** 支持打字机效果的流式输出，体验最佳。启用方式：`enableAICard: true`
+>
+> 💡 **飞书 Markdown 卡片** 启用方式：`sendMarkdownAsCard: true`
+>
+> 💡 **企业微信** 仅支持被动回复模式，不支持主动发送消息
+
 ## 快速开始
 
 ### 1) 安装
@@ -21,39 +44,43 @@
 **安装统一包（包含所有渠道）**
 
 ```bash
-clawdbot plugins install @openclaw-china/channels
+openclaw plugins install @openclaw-china/channels
 ```
 
 **或者：安装单个渠道（不要和统一包同时安装）**
 
 ```bash
-clawdbot plugins install @openclaw-china/dingtalk
+openclaw plugins install @openclaw-china/dingtalk
 ```
 
 ```bash
-clawdbot plugins install @openclaw-china/feishu
+openclaw plugins install @openclaw-china/feishu
 ```
 
 ```bash
-clawdbot plugins install @openclaw-china/wecom
+openclaw plugins install @openclaw-china/wecom
 ```
+
+> ℹ️ 如果你使用的是旧名称 **clawbot**，请使用 `@openclaw-china/channels@0.1.12`。
 
 ### 2) 配置渠道
 
 #### 钉钉
 
 > 📖 **[钉钉企业注册指南](doc/guides/dingtalk/configuration.md)** — 无需材料，5 分钟内完成配置
+
 ```bash
-clawdbot config set channels.dingtalk '{
+openclaw config set channels.dingtalk '{
   "enabled": true,
   "clientId": "dingxxxxxx",
-  "clientSecret": "your-app-secret"
+  "clientSecret": "your-app-secret",
+  "enableAICard": true
 }' --json
 ```
 
 **可选高级配置**
 
-如果你需要更细粒度控制（例如私聊/群聊策略或白名单），可以在 `~/.clawdbot/clawdbot.json` 中按需添加：
+如果你需要更细粒度控制（例如私聊/群聊策略或白名单），可以在 `~/.openclaw/openclaw.json` 中按需添加：
 
 ```json5
 {
@@ -73,10 +100,10 @@ clawdbot config set channels.dingtalk '{
 
 > 飞书应用需开启机器人能力，并使用「长连接接收消息」模式
 
-Clawdbot:
+openclaw:
 
 ```bash
-clawdbot config set channels.feishu '{
+openclaw config set channels.feishu '{
   "enabled": true,
   "appId": "cli_xxxxxx",
   "appSecret": "your-app-secret"
@@ -88,7 +115,7 @@ clawdbot config set channels.feishu '{
 > 企业微信智能机器人（API 模式）通过公网 HTTPS 回调接收消息，仅支持被动回复
 
 ```bash
-clawdbot config set channels.wecom '{
+openclaw config set channels.wecom '{
   "enabled": true,
   "webhookPath": "/wecom",
   "token": "your-token",
@@ -105,7 +132,7 @@ clawdbot config set channels.wecom '{
 ### 3) 重启 Gateway
 
 ```bash
-clawdbot gateway restart
+openclaw gateway restart
 ```
 
 ## 演示
@@ -155,11 +182,8 @@ cd moltbot-china
 pnpm install
 pnpm build
 
-# 以链接模式安装（修改代码后实时生效，二选一）
-clawdbot plugins install -l ./packages/channels
-
-# 单渠道开发时：
-# clawdbot plugins install -l ./extensions/dingtalk
+# 以链接模式安装（修改代码后实时生效）
+openclaw plugins install -l ./packages/channels
 ```
 
 **示例配置（开发环境）**
