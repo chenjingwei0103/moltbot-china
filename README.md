@@ -106,7 +106,7 @@ openclaw config set channels.dingtalk '{
   "enabled": true,
   "clientId": "dingxxxxxx",
   "clientSecret": "your-app-secret",
-  "enableAICard": false
+  "enableAICard": true
 }' --json
 ```
 
@@ -262,7 +262,11 @@ openclaw plugins install -l ./packages/channels
 ```
 
 对OpenClaw用法、插件感兴趣的可以加群交流。
-欢迎同学们一起开发~
+
+- 安装问题可以加群询问
+- 插件BUG建议提交issue
+
+** 欢迎同学们一起开发~ **
 
 <img width="611" height="854" alt="4d16a9f91778b4ad0153c40733ae3042" src="https://github.com/user-attachments/assets/563160be-78ac-4cd5-b01c-d83c77e5e4b8" />
 

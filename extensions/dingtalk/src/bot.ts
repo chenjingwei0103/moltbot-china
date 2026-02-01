@@ -798,7 +798,7 @@ export async function handleDingtalkMessage(params: {
   
   // 策略检�?
   if (isGroup) {
-    const groupPolicy = channelCfg?.groupPolicy ?? "allowlist";
+    const groupPolicy = channelCfg?.groupPolicy ?? "open";
     const groupAllowFrom = channelCfg?.groupAllowFrom ?? [];
     const requireMention = channelCfg?.requireMention ?? true;
     
@@ -815,7 +815,7 @@ export async function handleDingtalkMessage(params: {
       return;
     }
   } else {
-    const dmPolicy = channelCfg?.dmPolicy ?? "pairing";
+    const dmPolicy = channelCfg?.dmPolicy ?? "open";
     const allowFrom = channelCfg?.allowFrom ?? [];
     
     const policyResult = checkDmPolicy({
@@ -1089,6 +1089,14 @@ export async function handleDingtalkMessage(params: {
     const tableMode = "bullets";
 
     const deliver = async (payload: { text?: string; mediaUrl?: string; mediaUrls?: string[] }) => {
+      logger.debug(
+        `[reply] payload=${JSON.stringify({
+          hasText: typeof payload.text === "string",
+          text: payload.text,
+          mediaUrl: payload.mediaUrl,
+          mediaUrls: payload.mediaUrls,
+        })}`
+      );
       const targetId = isGroup ? ctx.conversationId : ctx.senderId;
       const chatType = isGroup ? "group" : "direct";
 
@@ -1224,7 +1232,10 @@ export async function handleDingtalkMessage(params: {
     markDispatchIdle?.();
 
     const counts = (result as Record<string, unknown>)?.counts as Record<string, unknown> | undefined;
-    logger.debug(`dispatch complete (replies=${counts?.final ?? 0})`);
+    const queuedFinal = (result as Record<string, unknown>)?.queuedFinal as unknown;
+    logger.debug(
+      `dispatch complete (queuedFinal=${typeof queuedFinal === "boolean" ? queuedFinal : "unknown"}, replies=${counts?.final ?? 0})`
+    );
     
     // ===== 文件清理 (Requirements 8.1, 8.2, 8.4) =====
     // 清理单个媒体文件
