@@ -254,9 +254,11 @@ export class GatewayWsClient {
     let error: Error | null = null;
     let disconnectedWithData = false; // 标记：连接断开但有数据
     const resolvers: Array<() => void> = [];
+    let lastState: ChatEvent["state"] | null = null;
 
     // 注册 chat 事件监听
     this.chatListeners.set(runId, (evt) => {
+      lastState = evt.state;
       if (evt.state === "delta" || evt.state === "final") {
         const text =
           evt.message?.content
@@ -296,36 +298,25 @@ export class GatewayWsClient {
         timeoutMs: params.timeoutMs ?? 120000,
       });
 
-      let lastYielded = "";
-
       while (!done) {
-        // 等待新数据
+        // wait for new data
         await new Promise<void>((resolve) => {
-          if (accumulated !== lastYielded || done) {
+          if (done) {
             resolve();
           } else {
             resolvers.push(resolve);
           }
         });
 
-        // 改进：只有在没有累积数据时才抛出错误
+        // only throw when there is no accumulated data
         if (error && accumulated.length === 0) throw error;
-
-        // yield 新增的内容
-        if (accumulated !== lastYielded) {
-          const delta = accumulated.slice(lastYielded.length);
-          if (delta) yield delta;
-          lastYielded = accumulated;
-        }
       }
 
-      // 确保最后的数据被 yield
-      if (accumulated !== lastYielded) {
-        const delta = accumulated.slice(lastYielded.length);
-        if (delta) yield delta;
+      // only allow final output
+      if (lastState === "final" && accumulated) {
+        yield accumulated;
       }
 
-      // 如果是断开连接但有数据的情况，记录日志
       if (disconnectedWithData) {
         this.logger.info(`[gateway-ws] stream completed with ${accumulated.length} chars (connection was interrupted)`);
       }

@@ -284,10 +284,12 @@ async function* streamFromGateway(params: {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let accumulated = "";
+  let streamDone = false;
 
   while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
+    const { done: readDone, value } = await reader.read();
+    if (readDone) break;
 
     buffer += decoder.decode(value, { stream: true });
     const lines = buffer.split("\n");
@@ -296,17 +298,25 @@ async function* streamFromGateway(params: {
     for (const line of lines) {
       if (!line.startsWith("data: ")) continue;
       const data = line.slice(6).trim();
-      if (data === "[DONE]") return;
+      if (data === "[DONE]") {
+        streamDone = true;
+        break;
+      }
       try {
         const chunk = JSON.parse(data);
         const content = (chunk as Record<string, unknown>)?.choices?.[0]?.delta?.content;
         if (typeof content === "string" && content) {
-          yield content;
+          accumulated += content;
         }
       } catch {
         continue;
       }
     }
+    if (streamDone) break;
+  }
+
+  if (streamDone && accumulated) {
+    yield accumulated;
   }
 }
 
@@ -1196,6 +1206,14 @@ export async function handleDingtalkMessage(params: {
       }
     };
 
+    const deliverFinalOnly = async (
+      payload: { text?: string; mediaUrl?: string; mediaUrls?: string[] },
+      info?: { kind?: string }
+    ) => {
+      if (!info || info.kind !== "final") return;
+      await deliver(payload);
+    };
+
     const humanDelay = (replyApi?.resolveHumanDelayConfig as ((cfg: unknown, agentId?: string) => unknown) | undefined)?.(
       cfg,
       (route as Record<string, unknown>)?.agentId as string | undefined
@@ -1210,8 +1228,8 @@ export async function handleDingtalkMessage(params: {
 
     const dispatcherResult = createDispatcherWithTyping
       ? createDispatcherWithTyping({
-          deliver: async (payload: unknown) => {
-            await deliver(payload as { text?: string; mediaUrl?: string; mediaUrls?: string[] });
+          deliver: async (payload: unknown, info?: { kind?: string }) => {
+            await deliverFinalOnly(payload as { text?: string; mediaUrl?: string; mediaUrls?: string[] }, info);
           },
           humanDelay,
           onError: (err: unknown, info: { kind: string }) => {
@@ -1220,8 +1238,8 @@ export async function handleDingtalkMessage(params: {
         })
       : {
           dispatcher: createDispatcher?.({
-            deliver: async (payload: unknown) => {
-              await deliver(payload as { text?: string; mediaUrl?: string; mediaUrls?: string[] });
+            deliver: async (payload: unknown, info?: { kind?: string }) => {
+              await deliverFinalOnly(payload as { text?: string; mediaUrl?: string; mediaUrls?: string[] }, info);
             },
             humanDelay,
             onError: (err: unknown, info: { kind: string }) => {
