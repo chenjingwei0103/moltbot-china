@@ -42,7 +42,7 @@ export const wecomAppPlugin = {
 
   capabilities: {
     chatTypes: ["direct", "group"] as const,
-    media: false,
+    media: true,
     reactions: false,
     threads: false,
     edit: false,
