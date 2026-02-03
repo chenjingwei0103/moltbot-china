@@ -52,6 +52,17 @@ export {
   sendWecomAppImageMessage,
 } from "./src/api.js";
 
+// 导出封装发送函数 (业务层推荐使用)
+export {
+  sendWecomDM,
+  sendWecomGroup,
+  sendWecom,
+  normalizeTarget,
+  parseTarget,
+  type SendMessageOptions,
+  type SendResult,
+} from "./src/send.js";
+
 // 导出类型
 export type {
   WecomAppConfig,
