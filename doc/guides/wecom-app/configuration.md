@@ -25,14 +25,14 @@
 
 ### 微信入口
 
-![微信界面](image/configuration/1770106970867.png)
-![进入后](image/configuration/1770106983366.png)
+<img src="image/configuration/1770106970867.png" width="48%" />
+<img src="image/configuration/1770106983366.png" width="48%" />
 
 ---
 
 ### 对话效果
 
-![对话效果](image/configuration/1770107297696.png)
+<img src="image/configuration/1770107297696.png" width="50%" />
 
 </div>
 
@@ -98,15 +98,14 @@ openclaw plugins list
 1. 点击左侧菜单「应用管理」
 2. 在「自建」区域点击「创建应用」
 
-   ![创建应用入口](image/configuration/1770105395578.png)
-
+   <img src="image/configuration/1770105395578.png" />
 3. 填写应用信息：
 
    - **应用名称**：例如 "AI 助手"
    - **应用 logo**：上传一个图标
    - **可见范围**：选择可以使用该应用的部门/成员
 
-  ![填写应用信息](image/configuration/1770105469298.png)
+  <img src="image/configuration/1770105469298.png" />
 
 4. 点击「创建应用」
 
@@ -117,8 +116,7 @@ openclaw plugins list
 - **AgentId**：应用的唯一标识（如 `1000002`）
 - **Secret**：点击查看获取（这就是 `corpSecret`）
 
-![获取应用凭证](image/configuration/1770105739884.png)
-
+<img src="image/configuration/1770105739884.png" />
 
 ### 4. 获取企业 ID
 
@@ -126,9 +124,7 @@ openclaw plugins list
 2. 在「企业信息」页面底部找到「企业 ID」
 3. 记录这个 ID（这就是 `corpId`）
 
-
-![获取企业 ID](image/configuration/1770105784942.png)
-
+<img src="image/configuration/1770105784942.png" />
 
 ---
 
@@ -145,17 +141,17 @@ openclaw plugins list
 - **Token**：自定义一个字符串，例如 `your-random-token`
 - **EncodingAESKey**：点击「随机获取」生成 43 位字符
 
-![配置接收消息](image/configuration/1770106232112.png)
+<img src="image/configuration/1770106232112.png" />
 
 > ⚠️ **重要**：先配置好 OpenClaw，再点击「保存」，否则验证会失败。
 
-![保存配置](image/configuration/1770106267509.png)
+<img src="image/configuration/1770106267509.png" />
 
 ### 3. 配置 IP 白名单
 
 在应用详情页的「企业可信 IP」设置中，添加你服务器的公网 IP 地址。
 
-![配置 IP 白名单](image/configuration/1770106297408.png)
+<img src="image/configuration/1770106297408.png" />
 
 > 💡 如果不知道服务器 IP，可以先尝试发送消息，查看错误日志获取 IP。
 
