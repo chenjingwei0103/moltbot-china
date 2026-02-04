@@ -18,12 +18,12 @@ import {
 } from "./config.js";
 import { registerWecomAppWebhookTarget } from "./monitor.js";
 import { setWecomAppRuntime } from "./runtime.js";
-import { sendWecomAppMessage, stripMarkdown, downloadAndSendImage, downloadAndSendVoice, downloadAndSendFile } from "./api.js";
+import { sendWecomAppMessage, stripMarkdown, downloadAndSendImage, downloadAndSendVoice, downloadAndSendFile, downloadAndSendVideo } from "./api.js";
 
 /**
  * 媒体类型
  */
-type MediaType = "image" | "voice" | "file";
+type MediaType = "image" | "voice" | "file" | "video";
 
 /**
  * 根据文件路径或 MIME 类型检测媒体类型
@@ -37,6 +37,9 @@ function detectMediaType(filePath: string, mimeType?: string): MediaType {
     }
     if (mime.startsWith("audio/") || mime === "audio/amr") {
       return "voice";
+    }
+    if (mime.startsWith("video/")) {
+      return "video";
     }
   }
 
@@ -56,6 +59,12 @@ function detectMediaType(filePath: string, mimeType?: string): MediaType {
   const voiceExts = ["amr", "speex", "mp3", "wav"];
   if (voiceExts.includes(ext)) {
     return "voice";
+  }
+
+  // 视频扩展名
+  const videoExts = ["mp4", "mov", "avi", "mkv"];
+  if (videoExts.includes(ext)) {
+    return "video";
   }
 
   // 默认作为文件处理
@@ -482,6 +491,10 @@ export const wecomAppPlugin = {
           // 语音: 下载 → 上传素材 → 发送
           console.log(`[wecom-app] Routing to downloadAndSendVoice`);
           result = await downloadAndSendVoice(account, target, params.mediaUrl);
+        } else if (mediaType === "video") {
+          // 视频: 下载 → 上传素材 → 发送
+          console.log(`[wecom-app] Routing to downloadAndSendVideo`);
+          result = await downloadAndSendVideo(account, target, params.mediaUrl);
         } else {
           // 文件/其他: 下载 → 上传素材 → 发送
           console.log(`[wecom-app] Routing to downloadAndSendFile`);

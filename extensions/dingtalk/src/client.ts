@@ -16,8 +16,6 @@ import { resolveDingtalkCredentials, type DingtalkConfig } from "./config.js";
 interface DingtalkClientOptions {
   clientId: string;
   clientSecret: string;
-  /** Optional UA label for DingTalk gateway */
-  ua?: string;
 }
 
 /** 缓存的客户端实例 */
@@ -48,7 +46,6 @@ export function createDingtalkClient(opts: DingtalkClientOptions): DWClient {
   const client = new DWClient({
     clientId: opts.clientId,
     clientSecret: opts.clientSecret,
-    ...(opts.ua ? { ua: opts.ua } : {}),
   });
 
   // 更新缓存
@@ -73,10 +70,7 @@ export function createDingtalkClientFromConfig(cfg: DingtalkConfig): DWClient {
   if (!creds) {
     throw new Error("DingTalk credentials not configured (clientId, clientSecret required)");
   }
-  return createDingtalkClient({
-    ...creds,
-    ua: "openclaw-dingtalk",
-  });
+  return createDingtalkClient(creds);
 }
 
 /**

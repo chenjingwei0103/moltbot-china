@@ -110,11 +110,21 @@ pnpm build
 > 📖 **[钉钉企业注册指南](doc/guides/dingtalk/configuration.md)** — 无需材料，5 分钟内完成配置
 
 ```bash
+openclaw config set channels.dingtalk '{
+  "enabled": true,
+  "clientId": "dingxxxxxx",
+  "clientSecret": "your-app-secret",
+  "enableAICard": false
+}' --json
+```
+
+**Windows 用户**（CMD 不支持单引号 JSON）：
+
+```cmd
 openclaw config set channels.dingtalk.enabled true
 openclaw config set channels.dingtalk.clientId dingxxxxxx
 openclaw config set channels.dingtalk.clientSecret your-app-secret
-openclaw config set channels.dingtalk.enableAICard false
-openclaw config set gateway.http.endpoints.chatCompletions.enabled true
+openclaw config set channels.dingtalk.enableAICard true
 ```
 
 **可选高级配置**
@@ -145,6 +155,20 @@ openclaw config set gateway.http.endpoints.chatCompletions.enabled true
 企业微信自建应用支持主动发送消息，需要额外配置 `corpId`、`corpSecret`、`agentId`：
 
 ```bash
+openclaw config set channels.wecom-app '{
+  "enabled": true,
+  "webhookPath": "/wecom-app",
+  "token": "your-token",
+  "encodingAESKey": "your-43-char-encoding-aes-key",
+  "corpId": "your-corp-id",
+  "corpSecret": "your-app-secret",
+  "agentId": 1000002
+}' --json
+```
+
+**Windows 用户**（CMD 不支持单引号 JSON）：
+
+```cmd
 openclaw config set channels.wecom-app.enabled true
 openclaw config set channels.wecom-app.webhookPath /wecom-app
 openclaw config set channels.wecom-app.token your-token
@@ -170,10 +194,12 @@ openclaw config set channels.wecom-app.agentId 1000002
 > 企业微信智能机器人（API 模式）通过公网 HTTPS 回调接收消息，仅支持被动回复
 
 ```bash
-openclaw config set channels.wecom.enabled true
-openclaw config set channels.wecom.webhookPath /wecom
-openclaw config set channels.wecom.token your-token
-openclaw config set channels.wecom.encodingAESKey your-43-char-encoding-aes-key
+openclaw config set channels.wecom '{
+  "enabled": true,
+  "webhookPath": "/wecom",
+  "token": "your-token",
+  "encodingAESKey": "your-43-char-encoding-aes-key"
+}' --json
 ```
 
 **注意事项**
@@ -191,10 +217,13 @@ openclaw config set channels.wecom.encodingAESKey your-43-char-encoding-aes-key
 openclaw:
 
 ```bash
-openclaw config set channels.feishu.enabled true
-openclaw config set channels.feishu.appId cli_xxxxxx
-openclaw config set channels.feishu.appSecret your-app-secret
-openclaw config set channels.feishu.sendMarkdownAsCard true
+openclaw config set channels.feishu '{
+  "enabled": true,
+  "appId": "cli_xxxxxx",
+  "appSecret": "your-app-secret",
+  "sendMarkdownAsCard": true
+
+}' --json
 ```
 
 
@@ -203,6 +232,32 @@ openclaw config set channels.feishu.sendMarkdownAsCard true
 ```bash
 openclaw gateway --port 18789 --verbose
 ```
+
+### 4) （可选）安装本仓库自带 Skills
+
+本仓库在 `skills/` 目录下提供了一些可直接复制使用的本地技能包（AgentSkills）。
+
+**安装方式（推荐：Workspace 级）**
+
+把 `skills/<skill-name>` 复制到你的 OpenClaw 工作区：
+
+```bash
+# 在你的项目目录（workspace）下
+mkdir -p ./skills
+cp -a /path/to/openclaw-china/skills/wecom-app-ops ./skills/
+```
+
+**或安装方式（全局）**
+
+```bash
+mkdir -p ~/.openclaw/skills
+cp -a /path/to/openclaw-china/skills/wecom-app-ops ~/.openclaw/skills/
+```
+
+> 说明：Workspace > 全局（`~/.openclaw/skills`）> 内置 skills。复制后无需重启网关。
+
+当前内置示例：
+- `wecom-app-ops`：企业微信自建应用（wecom-app）日常操作指南（target/replyTo/回发图片/录音/文件、OCR/MCP、排障、媒体保留策略）
 
 ## 演示
 
