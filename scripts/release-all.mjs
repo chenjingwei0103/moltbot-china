@@ -11,6 +11,7 @@ const sharedPath = path.join(root, "packages", "shared", "package.json");
 const dingtalkPath = path.join(root, "extensions", "dingtalk", "package.json");
 const feishuPath = path.join(root, "extensions", "feishu", "package.json");
 const wecomPath = path.join(root, "extensions", "wecom", "package.json");
+const wecomAppPath = path.join(root, "extensions", "wecom-app", "package.json");
 const channelsPath = path.join(root, "packages", "channels", "package.json");
 
 function readJson(p) {
@@ -92,12 +93,14 @@ const sharedPkg = readJson(sharedPath);
 const dingtalkPkg = readJson(dingtalkPath);
 const feishuPkg = readJson(feishuPath);
 const wecomPkg = readJson(wecomPath);
+const wecomAppPkg = readJson(wecomAppPath);
 const channelsPkg = readJson(channelsPath);
 
 const originalShared = readJson(sharedPath);
 const originalDingtalk = readJson(dingtalkPath);
 const originalFeishu = readJson(feishuPath);
 const originalWecom = readJson(wecomPath);
+const originalWecomApp = readJson(wecomAppPath);
 const originalChannels = readJson(channelsPath);
 
 try {
@@ -105,6 +108,7 @@ try {
   const nextDingtalk = getNextVersion(dingtalkPkg.name, dingtalkPkg.version);
   const nextFeishu = getNextVersion(feishuPkg.name, feishuPkg.version);
   const nextWecom = getNextVersion(wecomPkg.name, wecomPkg.version);
+  const nextWecomApp = getNextVersion(wecomAppPkg.name, wecomAppPkg.version);
   const nextChannels = getNextVersion(channelsPkg.name, channelsPkg.version);
 
   sharedPkg.version = nextShared;
@@ -125,28 +129,37 @@ try {
   wecomPkg.dependencies = wecomPkg.dependencies ?? {};
   wecomPkg.dependencies["@openclaw-china/shared"] = nextShared;
 
+  wecomAppPkg.version = nextWecomApp;
+  wecomAppPkg.private = false;
+  wecomAppPkg.dependencies = wecomAppPkg.dependencies ?? {};
+  wecomAppPkg.dependencies["@openclaw-china/shared"] = nextShared;
+
   channelsPkg.version = nextChannels;
   channelsPkg.dependencies = channelsPkg.dependencies ?? {};
   channelsPkg.dependencies["@openclaw-china/dingtalk"] = nextDingtalk;
   channelsPkg.dependencies["@openclaw-china/feishu"] = nextFeishu;
   channelsPkg.dependencies["@openclaw-china/wecom"] = nextWecom;
+  channelsPkg.dependencies["@openclaw-china/wecom-app"] = nextWecomApp;
 
   writeJson(sharedPath, sharedPkg);
   writeJson(dingtalkPath, dingtalkPkg);
   writeJson(feishuPath, feishuPkg);
   writeJson(wecomPath, wecomPkg);
+  writeJson(wecomAppPath, wecomAppPkg);
   writeJson(channelsPath, channelsPkg);
 
   run("pnpm -F @openclaw-china/shared build");
   run("pnpm -F @openclaw-china/dingtalk build");
   run("pnpm -F @openclaw-china/feishu build");
   run("pnpm -F @openclaw-china/wecom build");
+  run("pnpm -F @openclaw-china/wecom-app build");
   run("pnpm -F @openclaw-china/channels build");
 
   run("npm publish --access public", path.join(root, "packages", "shared"));
   run("npm publish --access public", path.join(root, "extensions", "dingtalk"));
   run("npm publish --access public", path.join(root, "extensions", "feishu"));
   run("npm publish --access public", path.join(root, "extensions", "wecom"));
+  run("npm publish --access public", path.join(root, "extensions", "wecom-app"));
   run("npm publish --access public", path.join(root, "packages", "channels"));
 } finally {
   // Restore workspace dependencies for local development
@@ -162,6 +175,10 @@ try {
     originalWecom.dependencies["@openclaw-china/shared"] =
       originalWecom.dependencies["@openclaw-china/shared"] ?? "workspace:*";
   }
+  if (originalWecomApp.dependencies) {
+    originalWecomApp.dependencies["@openclaw-china/shared"] =
+      originalWecomApp.dependencies["@openclaw-china/shared"] ?? "workspace:*";
+  }
   if (originalChannels.dependencies) {
     originalChannels.dependencies["@openclaw-china/dingtalk"] =
       originalChannels.dependencies["@openclaw-china/dingtalk"] ?? "workspace:*";
@@ -169,11 +186,14 @@ try {
       originalChannels.dependencies["@openclaw-china/feishu"] ?? "workspace:*";
     originalChannels.dependencies["@openclaw-china/wecom"] =
       originalChannels.dependencies["@openclaw-china/wecom"] ?? "workspace:*";
+    originalChannels.dependencies["@openclaw-china/wecom-app"] =
+      originalChannels.dependencies["@openclaw-china/wecom-app"] ?? "workspace:*";
   }
 
   writeJson(sharedPath, originalShared);
   writeJson(dingtalkPath, originalDingtalk);
   writeJson(feishuPath, originalFeishu);
   writeJson(wecomPath, originalWecom);
+  writeJson(wecomAppPath, originalWecomApp);
   writeJson(channelsPath, originalChannels);
 }

@@ -33,6 +33,22 @@ export interface PluginRuntime {
         peer: { kind: string; id: string };
       }) => { sessionKey: string; accountId: string; agentId?: string };
     };
+    session?: {
+      resolveStorePath?: (store: unknown, params: { agentId?: string }) => string | undefined;
+      recordInboundSession?: (params: {
+        storePath: string;
+        sessionKey: string;
+        ctx: unknown;
+        updateLastRoute?: {
+          sessionKey: string;
+          channel: string;
+          to: string;
+          accountId?: string;
+          threadId?: string | number;
+        };
+        onRecordError?: (err: unknown) => void;
+      }) => Promise<void>;
+    };
     reply?: {
       dispatchReplyFromConfig?: (params: {
         ctx: unknown;
